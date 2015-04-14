@@ -29,12 +29,22 @@ ngApp.config([
       .state('login', {
         url: '/login',
         templateUrl: '/login.html',
-        controller: 'AuthController'
+        controller: 'AuthController',
+        onEnter: ['$state', 'Auth', function($state, Auth) {
+          Auth.currentUser().then(function() {
+            $state.go('home');
+          });
+        }]
       })
       .state('register', {
         url: '/register',
         templateUrl: '/register.html',
-        controller: 'AuthController'
+        controller: 'AuthController',
+        onEnter: ['$state', 'Auth', function($state, Auth) {
+          Auth.currentUser().then(function() {
+            $state.go('home');
+          });
+        }]
       });
 
     $urlRouterProvider.otherwise('home');
@@ -184,6 +194,7 @@ ngApp.controller('AuthController', [
 
     $scope.register = function() {
       Auth.register($scope.user).then(function() {
+        console.log('Register!');
         $state.go('home');
       });
     };

@@ -19,7 +19,12 @@ app.config([
       .state('posts', {
         url: '/posts/{id}',
         templateUrl: '/posts.html',
-        controller: 'PostsController'
+        controller: 'PostsController',
+        resolve: {
+          post: ['$stateParams', 'posts', function($stateParams, posts) {
+            return posts.get($stateParams.id);
+          }]
+        }
       });
 
     $urlRouterProvider.otherwise('home');
@@ -40,6 +45,13 @@ app.factory('posts', [
         });
     };
 
+    o.get = function(id) {
+      return $http.get('/posts/' + id + '.json')
+        .then(function(res) {
+          return res.data;
+        });
+    };
+
     o.create = function(post) {
       return $http.post('/posts.json', post)
         .success(function(data){
@@ -51,6 +63,17 @@ app.factory('posts', [
       return $http.put('/posts/' + post.id + '/upvote.json')
         .success(function(data) {
           post.upvotes += 1;
+        });
+    };
+
+    o.addComment = function(id, comment) {
+      return $http.post('/posts/' + id + '/comments.json', comment);
+    };
+
+    o.upvoteComment = function(post, comment) {
+      return $http.put('/posts/' + post.id + '/comments/' + comment.id + '/upvote.json')
+        .success(function(data) {
+          comment.upvotes += 1;
         });
     };
 
@@ -87,27 +110,29 @@ app.controller('MainController', [
 
 app.controller('PostsController', [
   '$scope',
-  '$stateParams',
   'posts',
+  'post',
 
-  function($scope, $stateParams, posts) {
-    $scope.post = posts.posts[$stateParams.id];
+  function($scope, posts, post) {
+    $scope.post = post;
 
     $scope.addComment = function() {
       if ($scope.body === '') {
         return;
       } else {
-        $scope.post.comments.push({
+        posts.addComment(post.id, {
           body: $scope.body,
           author: 'user',
           upvotes: 0
+        }).success(function(comment) {
+          $scope.post.comments.push(comment);
         });
         $scope.body = '';
       }
     };
 
-    $scope.incrementUpvotes = function(post) {
-      post.upvotes += 1;
+    $scope.incrementUpvotes = function(comment) {
+      posts.upvoteComment(post, comment);
     };
   }
 ]);

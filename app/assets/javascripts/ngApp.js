@@ -38,6 +38,12 @@ app.factory('posts', [
           angular.copy(data, o.posts);
         });
     };
+    o.create = function(post) {
+      return $http.post('/posts.json', post)
+        .success(function(data){
+          o.posts.push(data);
+        });
+    };
     return o;
   }
 ]);
@@ -53,14 +59,10 @@ app.controller('MainController', [
       if (!$scope.title || $scope.title === '') {
         return;
       } else {
-        $scope.posts.push({
+        posts.create({
           title: $scope.title,
           link: $scope.link,
-          upvotes: 0,
-          comments: [
-            { author: 'Joe', body: 'Cool post!', upvotes: 0 },
-            { author: 'Bob', body: 'Bad post!',  upvotes: 0 }
-          ]
+          upvotes: 0
         });
         $scope.title = '';
         $scope.link = '';

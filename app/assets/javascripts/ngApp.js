@@ -25,6 +25,16 @@ ngApp.config([
             return posts.get($stateParams.id);
           }]
         }
+      })
+      .state('login', {
+        url: '/login',
+        templateUrl: '/login.html',
+        controller: 'AuthController'
+      })
+      .state('register', {
+        url: '/register',
+        templateUrl: '/register.html',
+        controller: 'AuthController'
       });
 
     $urlRouterProvider.otherwise('home');
@@ -157,6 +167,25 @@ ngApp.controller('PostsController', [
 
     $scope.incrementUpvotes = function(comment) {
       posts.upvoteComment(post, comment);
+    };
+  }
+]);
+
+ngApp.controller('AuthController', [
+  '$scope',
+  '$state',
+  'Auth',
+  function($scope, $state, Auth) {
+    $scope.login = function() {
+      Auth.login($scope.user).then(function() {
+        $state.go('home');
+      });
+    };
+
+    $scope.register = function() {
+      Auth.register($scope.user).then(function() {
+        $state.go('home');
+      });
     };
   }
 ]);

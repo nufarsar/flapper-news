@@ -1,6 +1,6 @@
-var app = angular.module('flapperNews', ['ui.router', 'templates', 'Devise']);
+var ngApp = angular.module('flapperNews', ['ui.router', 'templates', 'Devise']);
 
-app.config([
+ngApp.config([
   '$stateProvider',
   '$urlRouterProvider',
 
@@ -31,7 +31,7 @@ app.config([
   }
 ]);
 
-app.factory('posts', [
+ngApp.factory('posts', [
   '$http',
   function($http) {
     var o = {
@@ -81,7 +81,31 @@ app.factory('posts', [
   }
 ]);
 
-app.controller('MainController', [
+ngApp.controller('NavController', [
+  '$scope',
+  'Auth',
+  function($scope, Auth) {
+    Auth.currentUser().then(function (user) {
+      $scope.user = user;
+    });
+    $scope.signedIn = Auth.isAuthenticated;
+    $scope.logout = Auth.logout;
+
+    $scope.$on('devise:new-registration', function (e, user){
+      $scope.user = user;
+    });
+
+    $scope.$on('devise:login', function (e, user){
+      $scope.user = user;
+    });
+
+    $scope.$on('devise:logout', function (e, user){
+      $scope.user = {};
+    });
+  }
+]);
+
+ngApp.controller('MainController', [
   '$scope',
   'posts',
 
@@ -108,7 +132,7 @@ app.controller('MainController', [
   }
 ]);
 
-app.controller('PostsController', [
+ngApp.controller('PostsController', [
   '$scope',
   'posts',
   'post',

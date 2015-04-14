@@ -7,19 +7,6 @@
     <%= csrf_meta_tags %>
   </head>
   <body ng-app="flapperNews">
-    <script type="text/ng-template" id="/nav.html">
-      <div class="collapse navbar-collapse pull-right"
-           ng-controller="NavController">
-        <ul class="nav navbar-nav">
-          <li><a href="#/home">Home</a></li>
-          <li ng-hide="signedIn()"><a href="#/login">Log In</a></li>
-          <li ng-hide="signedIn()"><a href="#/register">Register</a></li>
-          <li ng-hide="signedIn()"><a href="#/">{{ user.username }}</a></li>
-          <li ng-hide="signedIn()"><a ng-click="logout()">Log Out</a></li>
-        </ul>
-      </div>
-    </script>
-
     <script type="text/ng-template" id="/home.html">
       <div class="page-header">
         <h1>Flapper News</h1>
@@ -98,7 +85,16 @@
 
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <div ng-include="nav.html"></div>
+        <div class="collapse navbar-collapse pull-right"
+             ng-controller="NavController">
+          <ul class="nav navbar-nav">
+            <li><a href="#/home">Home</a></li>
+            <li ng-hide="signedIn()"><a href="#/login">Log In</a></li>
+            <li ng-hide="signedIn()"><a href="#/register">Register</a></li>
+            <li ng-hide="signedIn()"><a href="#/">{{ user.username }}</a></li>
+            <li ng-hide="signedIn()"><a href="#" ng-click="logout()">Log Out</a></li>
+          </ul>
+        </div>
         <ui-view></ui-view>
       </div>
     </div>

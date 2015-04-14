@@ -1,6 +1,6 @@
-var app = angular.module('flapperNews', ['ui.router', 'templates']);
+var ngApp = angular.module('flapperNews', ['ui.router', 'templates']);
 
-app.config([
+ngApp.config([
   '$stateProvider',
   '$urlRouterProvider',
 
@@ -8,12 +8,12 @@ app.config([
     $stateProvider
       .state('home', {
         url: '/home',
-        templateUrl: '/home.html',
+        templateUrl: 'home/_home.html',
         controller: 'MainController'
       })
       .state('posts', {
         url: '/posts/{id}',
-        templateUrl: '/posts.html',
+        templateUrl: 'posts/_posts.html',
         controller: 'PostsController'
       });
 
@@ -21,7 +21,7 @@ app.config([
   }
 ]);
 
-app.factory('posts', [
+ngApp.factory('posts', [
   function() {
     var o = {
       posts: []
@@ -30,7 +30,7 @@ app.factory('posts', [
   }
 ]);
 
-app.controller('MainController', [
+ngApp.controller('MainController', [
   '$scope',
   'posts',
 
@@ -61,7 +61,7 @@ app.controller('MainController', [
   }
 ]);
 
-app.controller('PostsController', [
+ngApp.controller('PostsController', [
   '$scope',
   '$stateParams',
   'posts',

@@ -16,7 +16,7 @@
       .post-title {
         font-size: 20px;
       }
-      .post-add-form {
+      .add-form {
         margin-top: 30px;
       }
       .comment-body {
@@ -47,7 +47,7 @@
           <a href="#/posts/{{ $index }}">Comments</a>
         </span>
       </div>
-      <form class="post-add-form"
+      <form class="add-form"
             ng-submit="addPost()">
         <div class="form-group">
           <input type="text"
@@ -80,13 +80,25 @@
         <div class="upvote-block"
              ng-click="incrementUpvotes(comment)">
           <span class="glyphicon glyphicon-thumbs-up"></span>
-          {{ post.upvotes }}
+          {{ comment.upvotes }}
         </div>
         <span class="comment-body">
           {{ comment.body }}
           <em>- by {{ comment.author }}</em>
         </span>
       </div>
+      <form class="add-form"
+            ng-submit="addComment()">
+        <h3>Add a new comment</h3>
+
+        <div class="form-group">
+          <input type="text"
+                 class="form-control"
+                 placeholder="Comment"
+                 ng-model="body" />
+        </div>
+        <button type="submit">Post</button>
+      </form>
     </script>
 
     <div class="row">

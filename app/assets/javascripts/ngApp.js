@@ -9,7 +9,12 @@ app.config([
       .state('home', {
         url: '/home',
         templateUrl: '/home.html',
-        controller: 'MainController'
+        controller: 'MainController',
+        resolve: {
+          postPromise: ['posts', function(posts) {
+            return posts.getAll();
+          }]
+        }
       })
       .state('posts', {
         url: '/posts/{id}',
@@ -22,9 +27,16 @@ app.config([
 ]);
 
 app.factory('posts', [
-  function() {
+  '$http',
+  function($http) {
     var o = {
       posts: []
+    };
+    o.getAll = function() {
+      return $http.get('/posts.json')
+        .success(function(data) {
+          angular.copy(data, o.posts);
+        });
     };
     return o;
   }

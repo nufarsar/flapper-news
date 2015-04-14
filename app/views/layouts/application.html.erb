@@ -25,6 +25,7 @@
             {{ post.title }}
           </span>
         </span>
+        <em>posted by {{post.user.username}}</em>
         <span>
           <a href="#/posts/{{ post.id }}">Comments</a>
         </span>
@@ -66,7 +67,7 @@
         </div>
         <span class="comment-body">
           {{ comment.body }}
-          <em>- by {{ comment.author }}</em>
+          <em>- by {{ comment.user.username }}</em>
         </span>
       </div>
       <form class="add-form"

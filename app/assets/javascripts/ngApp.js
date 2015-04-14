@@ -105,11 +105,12 @@ ngApp.controller('NavController', [
   '$scope',
   'Auth',
   function($scope, Auth) {
+    $scope.signedIn = Auth.isAuthenticated;
+    $scope.logout = Auth.logout;
+
     Auth.currentUser().then(function (user) {
       $scope.user = user;
     });
-    $scope.signedIn = Auth.isAuthenticated;
-    $scope.logout = Auth.logout;
 
     $scope.$on('devise:new-registration', function (e, user){
       $scope.user = user;
@@ -166,7 +167,6 @@ ngApp.controller('PostsController', [
       } else {
         posts.addComment(post.id, {
           body: $scope.body,
-          author: 'user',
           upvotes: 0
         }).success(function(comment) {
           $scope.post.comments.push(comment);
@@ -194,7 +194,6 @@ ngApp.controller('AuthController', [
 
     $scope.register = function() {
       Auth.register($scope.user).then(function() {
-        console.log('Register!');
         $state.go('home');
       });
     };

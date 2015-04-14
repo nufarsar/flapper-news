@@ -5,11 +5,17 @@ app.config([
   '$urlRouterProvider',
 
   function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('home', {
-      url: '/home',
-      templateUrl: '/home.html',
-      controller: 'MainController'
-    });
+    $stateProvider
+      .state('home', {
+        url: '/home',
+        templateUrl: '/home.html',
+        controller: 'MainController'
+      })
+      .state('posts', {
+        url: '/posts/{id}',
+        templateUrl: '/posts.html',
+        controller: 'PostsController'
+      });
 
     $urlRouterProvider.otherwise('home');
   }
@@ -38,7 +44,11 @@ app.controller('MainController', [
         $scope.posts.push({
           title: $scope.title,
           link: $scope.link,
-          upvotes: 0
+          upvotes: 0,
+          comments: [
+            { author: 'Joe', body: 'Cool post!', upvotes: 0 },
+            { author: 'Bob', body: 'Bad post!',  upvotes: 0 }
+          ]
         });
         $scope.title = '';
         $scope.link = '';
@@ -48,5 +58,15 @@ app.controller('MainController', [
     $scope.incrementUpvotes = function(post) {
       post.upvotes += 1;
     };
+  }
+]);
+
+app.controller('PostsController', [
+  '$scope',
+  '$stateParams',
+  'posts',
+
+  function($scope, $stateParams, posts) {
+    $scope.post = posts.posts[$stateParams.id];
   }
 ]);
